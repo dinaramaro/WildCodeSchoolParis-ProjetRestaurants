@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "start": "concurrently \" node index \" \"./scripts/start_front.sh\"",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    // "install" : "concurrently \" npm i \" \"./scripts/install.sh\""
   },
   "repository": {
     "type": "git",

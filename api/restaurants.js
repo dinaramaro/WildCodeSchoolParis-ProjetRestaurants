@@ -14,8 +14,11 @@ router.get('/', (req, res) => {
         }
     })
 })
-router.get('/test', (req, res) => {
-    connection.query('SELECT name from restaurants', (err, results) => {
+// route when area is selected
+router.get('/area/:id', (req, res) => {
+    const id = req.params.id
+    console.log(id)
+    connection.query('SELECT name from restaurants WHERE id_area = ?', id, (err, results) => {
         res.json(results)
     })
 })

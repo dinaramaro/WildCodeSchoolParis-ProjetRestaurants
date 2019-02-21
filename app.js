@@ -3,6 +3,7 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 
 const restaurants = require('./api/restaurants');
+const areas = require('./api/areas');
 
 
 const app = express();
@@ -16,6 +17,7 @@ app.use(
 );
 
 app.use('/api/restaurants', restaurants);
+app.use('/api/areas', areas)
 
 const port = process.env.PORT || 3001;
 // eslint-disable-next-line no-console

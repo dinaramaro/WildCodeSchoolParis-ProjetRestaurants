@@ -5,8 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "concurrently \" node index \" \"./scripts/start_front.sh\"",
-    "test": "echo \"Error: no test specified\" && exit 1",
-    // "install" : "concurrently \" npm i \" \"./scripts/install.sh\""
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",
@@ -22,6 +21,7 @@
   "dependencies": {
     "concurrently": "^4.1.0",
     "express": "^4.16.4",
-    "lodash": "^4.17.11"
+    "lodash": "^4.17.11",
+    "mysql": "^2.16.0"
   }
 }

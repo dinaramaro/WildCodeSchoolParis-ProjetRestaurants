@@ -1,15 +1,24 @@
-// const express = require('express');
-// const bodyParser = require('body-parser');
-// const app = express();
-// const path = require('path');
-// const PATH_TO_STATIC_DIR = 'front/build';
+const express = require("express");
+const bodyParser = require('body-parser');
+const cors = require('cors');
 
-// app
-//   .use(bodyParser.urlencoded({ extended: true }))
-//   .use(bodyParser.json())
-//   .use(express.static(path.join(__dirname, PATH_TO_STATIC_DIR)))
-//   .get('*', (req, res) => {
-//     res.sendFile(path.join(__dirname, PATH_TO_STATIC_DIR, 'index.html'));
-//   });
+const restaurants = require('./api/restaurants');
 
-//   module.exports = app;
+
+const app = express();
+
+app.use(cors());
+app.use(bodyParser.json());
+app.use(
+  bodyParser.urlencoded({
+    extended: true
+  })
+);
+
+app.use('/api/restaurants', restaurants);
+
+const port = process.env.PORT || 3001;
+// eslint-disable-next-line no-console
+app.listen(port, () => console.log(`Example app listening on port ${port}!`));
+
+module.exports = app;

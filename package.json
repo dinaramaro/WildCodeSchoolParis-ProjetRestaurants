@@ -2,11 +2,10 @@
   "name": "restaurants-projects",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "app.js",
   "scripts": {
-    "start": "concurrently \" node index \" \"./scripts/start_front.sh\"",
-    "test": "echo \"Error: no test specified\" && exit 1",
-    // "install" : "concurrently \" npm i \" \"./scripts/install.sh\""
+    "start": "concurrently \" node app \" \"./scripts/start_front.sh\"",
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",
@@ -20,8 +19,11 @@
   },
   "homepage": "https://github.com/prudenceG/restaurants-projects#readme",
   "dependencies": {
+    "body-parser": "^1.18.3",
     "concurrently": "^4.1.0",
+    "cors": "^2.8.5",
     "express": "^4.16.4",
-    "lodash": "^4.17.11"
+    "lodash": "^4.17.11",
+    "mysql": "^2.16.0"
   }
 }

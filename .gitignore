@@ -1,3 +1,4 @@
 node_modules
 restaurants.json
 .DS_Store
+conf.js

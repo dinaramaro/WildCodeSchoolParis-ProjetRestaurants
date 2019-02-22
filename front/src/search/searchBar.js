@@ -26,15 +26,15 @@ class SearchBar extends Component {
     }
 
     render() {
-        const { areas } = this.state;
-
+        const { areas, area } = this.state;
+        console.log(area)
         return(
             <div>
                 <p>Search Bar</p>
                 <Form onSubmit={this.onSubmit}>
                     <Input type="select" onChange={this.handleChange}>
                         {areas.map(area => (
-                            <option key={area.id}>{area.name}</option>
+                            <option key={area.id} value={area.id}>{area.name}</option>
                         ))}
                     </Input>
                 <button type="submit">ok</button>

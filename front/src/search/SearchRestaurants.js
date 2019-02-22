@@ -6,7 +6,7 @@ import RestaurantItem from './RestaurantItem';
 class SearchRestaurants extends Component {
     state = {
         areas: [],
-        areaid: "",
+        areaId: "",
         restaurants: []
     }
 
@@ -17,19 +17,19 @@ class SearchRestaurants extends Component {
 
     onSubmit = (e) => {
         e.preventDefault()
-        axios.get(`http://localhost:3001/api/restaurants/area/${this.state.areaid}`)
+        axios.get(`http://localhost:3001/api/restaurants/area/${this.state.areaId}`)
         .then(data => this.setState({ restaurants: data.data}))
     }
 
     handleChange = (e) => {
+      const id = e.target.value;
         this.setState({
-            area: e.target.value
+            areaId: id,
         })
     }
 
     render() {
-        const { areas, area, restaurants } = this.state;
-        console.log(area)
+        const { areas, restaurants } = this.state;
         return(
             <div>
                 <p>Search Bar</p>

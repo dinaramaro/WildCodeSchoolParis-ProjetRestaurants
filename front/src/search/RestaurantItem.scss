@@ -1,0 +1,30 @@
+.RestaurantItem {
+
+  .card {
+    flex-direction: row;
+  
+
+    .bloc_img {
+      // border: 1px solid rgba(255,255,255,0.1);
+      border : 1px solid black;
+      height: 200px;
+      width: 250px;
+      overflow: hidden;
+
+      .cardimg {
+        height: 100%;
+        width: auto;
+      }
+
+    }
+    
+    .bloc_text {
+      border: 1px solid red;
+      width : 600px;
+      height : 200px;
+      overflow: hidden;
+    }
+   
+
+  }
+}

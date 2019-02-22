@@ -4,11 +4,7 @@
   "description": "",
   "main": "app.js",
   "scripts": {
-<<<<<<< HEAD
-    "start": "concurrently \" node index \" \"./scripts/start_front.sh\"",
-=======
     "start": "concurrently \" node app \" \"./scripts/start_front.sh\"",
->>>>>>> 2c9cfad71bb1f93fc01c2ed6a7c0513ae6f38df4
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {

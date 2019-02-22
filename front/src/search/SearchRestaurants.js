@@ -1,11 +1,12 @@
 import React, {Component} from 'react';
 import { Form, Input, Button } from 'reactstrap';
 import axios from 'axios';
+import RestaurantItem from './RestaurantItem';
 
-class SearchBar extends Component {
+class SearchRestaurants extends Component {
     state = {
         areas: [],
-        area: "",
+        areaid: "",
         restaurants: []
     }
 
@@ -13,9 +14,10 @@ class SearchBar extends Component {
         axios.get('http://localhost:3001/api/areas')
         .then(data => this.setState({ areas: data.data}))
     }
+
     onSubmit = (e) => {
         e.preventDefault()
-        axios.get(`http://localhost:3001/api/restaurants/area/${this.state.area}`)
+        axios.get(`http://localhost:3001/api/restaurants/area/${this.state.areaid}`)
         .then(data => this.setState({ restaurants: data.data}))
     }
 
@@ -26,7 +28,7 @@ class SearchBar extends Component {
     }
 
     render() {
-        const { areas, area } = this.state;
+        const { areas, area, restaurants } = this.state;
         console.log(area)
         return(
             <div>
@@ -37,10 +39,11 @@ class SearchBar extends Component {
                             <option key={area.id} value={area.id}>{area.name}</option>
                         ))}
                     </Input>
-                <button type="submit">ok</button>
+                <Button type="submit">ok</Button>
                 </Form>
+                <RestaurantItem filteredRestaurants={restaurants} />
             </div>
         )
     }
 }
-export default SearchBar;
+export default SearchRestaurants;

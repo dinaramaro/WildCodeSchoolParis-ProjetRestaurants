@@ -6,8 +6,12 @@ import RestaurantItem from './RestaurantItem';
 class SearchRestaurants extends Component {
     state = {
         areas: [],
-        areaId: "",
-        restaurants: []
+        restaurants: [],
+        message: "",
+        areaId: undefined,
+        rating: 5,
+        firstCategory: 'Restaurants',
+        secondCategory: 'Japonais'
     }
 
     componentDidMount() {
@@ -16,9 +20,34 @@ class SearchRestaurants extends Component {
     }
 
     onSubmit = (e) => {
+        const {rating, areaId, firstCategory, secondCategory} = this.state
+
+        let ratingUrl = ``
+        let areaUrl = ``
+        let firstCategoryUrl = ``
+        let secondCategoryUrl = ``
+
+        if (rating) {
+           ratingUrl = `&rating=${rating}`
+        }
+        if(areaId) {
+            areaUrl = `&id_area=${areaId}`
+        }
+        if(firstCategory) {
+            firstCategoryUrl = `&first_category=${firstCategory}`
+        }
+        if(secondCategory) {
+            secondCategoryUrl = `&second_category=${secondCategory}`
+        }
+
         e.preventDefault()
-        axios.get(`http://localhost:3001/api/restaurants/area/${this.state.areaId}`)
-        .then(data => this.setState({ restaurants: data.data}))
+        axios.get(`http://localhost:3001/api/restaurants/?result=all${areaUrl}${firstCategoryUrl}${secondCategoryUrl}${ratingUrl}`)
+        .then(data => {
+            this.setState({ 
+                restaurants: data.data,
+                message: data.data.message,
+            })
+        })
     }
 
     handleChange = (e) => {
@@ -29,7 +58,9 @@ class SearchRestaurants extends Component {
     }
 
     render() {
-        const { areas, restaurants } = this.state;
+        const { areas, restaurants, message } = this.state;
+        console.log(message)
+        console.log(restaurants.length)
         return(
             <div>
                 <p>Search Bar</p>
@@ -41,7 +72,8 @@ class SearchRestaurants extends Component {
                     </Input>
                 <Button type="submit">ok</Button>
                 </Form>
-                <RestaurantItem filteredRestaurants={restaurants} />
+                {restaurants.length ? (<RestaurantItem filteredRestaurants={restaurants}/>)
+                : (<p>{message}</p>)}
             </div>
         )
     }

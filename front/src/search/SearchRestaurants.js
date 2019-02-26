@@ -10,7 +10,7 @@ class SearchRestaurants extends Component {
         message: "",
         areaId: undefined,
         rating: undefined,
-        firstCategory: 'Bars',
+        firstCategory: undefined,
         secondCategory: undefined
     }
 

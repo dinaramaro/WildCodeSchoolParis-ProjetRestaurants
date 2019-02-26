@@ -9,9 +9,9 @@ class SearchRestaurants extends Component {
         restaurants: [],
         message: "",
         areaId: undefined,
-        rating: 5,
+        rating: undefined,
         firstCategory: 'Restaurants',
-        secondCategory: 'Japonais',
+        secondCategory: undefined,
         filteredRestaurants: [],
     }
 
@@ -45,18 +45,13 @@ class SearchRestaurants extends Component {
         }
 
         e.preventDefault()
-<<<<<<< HEAD
-        axios.get(`http://localhost:3001/api/restaurants/area/${this.state.areaId}`)
-        .then(data => this.setState({ filteredRestaurants: data.data}))
-=======
         axios.get(`http://localhost:3001/api/restaurants/?result=all${areaUrl}${firstCategoryUrl}${secondCategoryUrl}${ratingUrl}`)
         .then(data => {
             this.setState({ 
-                restaurants: data.data,
+                filteredRestaurants: data.data,
                 message: data.data.message,
             })
         })
->>>>>>> ee2c334ce05594442bb6a741c1f940df3a16a1f5
     }
 
     handleChange = (e) => {
@@ -67,14 +62,8 @@ class SearchRestaurants extends Component {
     }
 
     render() {
-<<<<<<< HEAD
-        const { areas, restaurants, filteredRestaurants } = this.state;
+        const { areas, restaurants, filteredRestaurants, message } = this.state;
 
-=======
-        const { areas, restaurants, message } = this.state;
-        console.log(message)
-        console.log(restaurants.length)
->>>>>>> ee2c334ce05594442bb6a741c1f940df3a16a1f5
         return(
             <div>
                 <p>Search Bar</p>
@@ -86,17 +75,13 @@ class SearchRestaurants extends Component {
                     </Input>
                     <Input type="select">
                           {Array.from(new Set(restaurants)).map(restaurant => (
-                            <option key={restaurant.primaryCategory}>{restaurant.primaryCategory}</option>
+                            <option key={restaurant.id}>{restaurant.primaryCategory}</option>
                           ))}
                     </Input>
                 <Button type="submit">ok</Button>
                 </Form>
-<<<<<<< HEAD
-                <RestaurantItem filteredRestaurants={filteredRestaurants} />
-=======
-                {restaurants.length ? (<RestaurantItem filteredRestaurants={restaurants}/>)
+                {filteredRestaurants.length ? (<RestaurantItem filteredRestaurants={filteredRestaurants}/>)
                 : (<p>{message}</p>)}
->>>>>>> ee2c334ce05594442bb6a741c1f940df3a16a1f5
             </div>
         )
     }

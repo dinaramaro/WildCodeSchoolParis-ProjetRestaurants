@@ -1,3 +1,4 @@
+
 .RestaurantItem {
 
   .card {
@@ -29,19 +30,27 @@
             text-align: center;
             margin-right: 10px;
           }
-  
-          .secondary_category {
-             
+
+          .img_front {
+            width: 40px;
+            height: 40px;
+          }
+          .bloc_star {
+            width: 40px;
+            height: 40px;
+            border: 1px solid yellow;
+            .background_star {
+              background-image: url('/yellow_star.png');
+              border: 1px solid red;
+              width: 100%;
+              height: 100%;
+            }
           }
       }
 
       .bloc_text {
-        overflow: hidden;
-        height : 100px;
-
+        min-height : 100px;
       }
     }
-   
-
   }
 }

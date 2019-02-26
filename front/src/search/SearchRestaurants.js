@@ -9,9 +9,9 @@ class SearchRestaurants extends Component {
         restaurants: [],
         message: "",
         areaId: undefined,
-        rating: 5,
-        firstCategory: 'Restaurants',
-        secondCategory: 'Japonais'
+        rating: undefined,
+        firstCategory: 'Bars',
+        secondCategory: undefined
     }
 
     componentDidMount() {

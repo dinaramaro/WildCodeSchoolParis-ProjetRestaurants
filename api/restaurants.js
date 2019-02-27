@@ -4,17 +4,6 @@ const express = require("express");
 
 const router = express.Router();
 
-// router.get('/', (req, res) => {
-//   connection.query('SELECT * from restaurants', (err, results) => {
-//     if (err) {
-//       res.status(500).send('Erreur lors du chargement');
-//     } else {
-//       res.json(results)
-//     }
-//   })
-// })
-
-// route when area is selected
 router.get('/', (req, res) => {
   const idArea = req.query.id_area
   const rating = req.query.rating
@@ -25,7 +14,6 @@ router.get('/', (req, res) => {
   let ratingSql = ``
   let first_categorySql = ``
   let second_categorySql = ``
-  console.log(idArea, rating, first_category, second_category)
 
   if (idArea) {
     idAreaSql = `AND id_area = ${idArea}`

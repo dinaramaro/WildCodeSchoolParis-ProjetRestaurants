@@ -1,3 +1,4 @@
+
 .RestaurantItem {
 
   .card {
@@ -13,35 +14,75 @@
       background-color: grey;
       background-size: cover;
       background-position: center;
-
     }
     
     .bloc_infos {
       padding: 20px;
       width : 70%;
       
-      .info_item {
+      .info_item_parent {
         display: flex;
         justify-content: space-between;
         align-items: center;
 
+          .info_item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+          }
+
           .primary_category {
             text-align: center;
+          }
+
+          .img_front {
+            width: 40px;
+            height: 40px;
             margin-right: 10px;
           }
-  
-          .secondary_category {
-             
+
+          .rating {
+            width: 30px;
+            height: 30px;
+          }
+          .background_star {
+            width: 30px;
+            height: 30px;
+            margin-right: 10px;
+            background-image: url('/empty_star.png');
+            background-size: cover;
+            transition: 0.2s all ease;
+            cursor: pointer;
+          }
+
+          .background_star:hover {
+            background-image: url('/yellowstar.png');
+            background-size: cover;
+            transform: scale(1.3, 1.3);
           }
       }
 
       .bloc_text {
-        overflow: hidden;
-        height : 100px;
-
+        min-height : 100px;
+        margin: 10px 0;
       }
     }
-   
+  }
+  @media all and (max-width: 768px) {
+    .card {
+      flex-direction: column;
+      width: 90%;
+  
+      .bloc_img {
+        height: 150px;
+        width: 100%;
+      }
 
+      .bloc_infos {
+        width: 90%;
+        margin: 10px auto;
+        text-align: left;
+      }
+    }
   }
 }

@@ -1,18 +1,42 @@
 import React, {Component} from 'react';
-import { Form, Input, Button } from 'reactstrap';
+import { Form, Input, Button, Container, Col, Row } from 'reactstrap';
 import axios from 'axios';
 import RestaurantItem from './RestaurantItem';
+import './SearchRestaurants.scss';
+
+
+const findCategory = (array, column) => {
+  let unique = []
+  if (array.length !== 0) {
+    for (let i=0; i<array.length; i++) {
+      if (unique.length === 0) {
+        unique.push(array[i][column])
+      } else {
+        let count = 0;
+        for (let j=0; j<unique.length; j++) {
+          if (unique[j] === array[i][column]) {
+            count = count + 1
+          }
+        } if (count === 0 && array[i][column] !== null) {
+          unique.push(array[i][column])
+        }
+      } 
+    } return unique;
+  } 
+}
 
 class SearchRestaurants extends Component {
     state = {
         areas: [],
         restaurants: [],
         message: "",
-        areaId: undefined,
-        rating: undefined,
-        firstCategory: 'Restaurants',
-        secondCategory: undefined,
-        filteredRestaurants: [],
+        primaryCategory : [],
+        secondaryCategory : [],
+        rating : [],
+        targetAreaId: undefined,
+        targetRating: undefined,
+        targetPrimaryCategory: undefined,
+        targetSecondCategory: undefined,
     }
 
     componentDidMount() {
@@ -20,69 +44,146 @@ class SearchRestaurants extends Component {
         .then(data => this.setState({ areas: data.data}))
 
         axios.get('http://localhost:3001/api/restaurants')
-        .then(data => this.setState({ restaurants : data.data}))
+        .then(data => {
+          this.setState({ 
+            restaurants : data.data,
+            primaryCategory : findCategory(data.data, "primaryCategory"),
+            secondaryCategory : findCategory(data.data, "secondaryCategory"),
+            rating : findCategory(data.data, "editorialRating")
+          })
+        })
     }
 
     onSubmit = (e) => {
-        const {rating, areaId, firstCategory, secondCategory} = this.state
+        const {targetRating, targetAreaId, targetPrimaryCategory, targetSecondCategory} = this.state
 
         let ratingUrl = ``
         let areaUrl = ``
         let firstCategoryUrl = ``
         let secondCategoryUrl = ``
 
-        if (rating) {
-           ratingUrl = `&rating=${rating}`
+        if (targetRating) {
+          if (targetRating === "undefined") {
+            ratingUrl = ``
+          } else {
+            ratingUrl = `&rating=${targetRating}`
+          }
+           
         }
-        if(areaId) {
-            areaUrl = `&id_area=${areaId}`
+
+        if(targetAreaId) {
+          if (targetAreaId === "undefined") {
+            areaUrl = ``
+          } else {
+            areaUrl = `&id_area=${targetAreaId}`
+          }
+            
         }
-        if(firstCategory) {
-            firstCategoryUrl = `&first_category=${firstCategory}`
+        if(targetPrimaryCategory) {
+          if (targetPrimaryCategory === "undefined") {
+            firstCategoryUrl = ``
+          } else {
+            firstCategoryUrl = `&first_category=${targetPrimaryCategory}`
+          }
         }
-        if(secondCategory) {
-            secondCategoryUrl = `&second_category=${secondCategory}`
+
+        if(targetSecondCategory) {
+          if (targetSecondCategory === "undefined") {
+            secondCategoryUrl = ``
+          } else {
+            secondCategoryUrl = `&second_category=${targetSecondCategory}`
+          }
         }
 
         e.preventDefault()
         axios.get(`http://localhost:3001/api/restaurants/?result=all${areaUrl}${firstCategoryUrl}${secondCategoryUrl}${ratingUrl}`)
         .then(data => {
             this.setState({ 
-                filteredRestaurants: data.data,
+                restaurants: data.data,
                 message: data.data.message,
             })
         })
     }
 
-    handleChange = (e) => {
+    handleChangeArea = (e) => {
       const id = e.target.value;
         this.setState({
-            areaId: id,
+            targetAreaId: id,
         })
     }
 
+    handleChangePrimaryCategory = (e) => {
+      const primaryCategory = e.target.value;
+      this.setState({
+        targetPrimaryCategory : primaryCategory,
+      })
+    }
+
+    handleChangeSecondaryCategory = (e) => {
+      const secondaryCategory = e.target.value;
+      this.setState({
+        targetSecondCategory : secondaryCategory,
+      })
+    }
+
+    handleChangeRating = (e) => {
+      const rating = e.target.value;
+      this.setState({
+        targetRating : rating,
+      })
+    }
+
     render() {
-        const { areas, restaurants, filteredRestaurants, message } = this.state;
+        const { areas, restaurants, message, primaryCategory, secondaryCategory, rating } = this.state;
+
+        console.log("rating", rating)
+        console.log("All", restaurants)
 
         return(
-            <div>
+            <Container className="SearchRestaurants">
                 <p>Search Bar</p>
+                
                 <Form onSubmit={this.onSubmit}>
-                    <Input type="select" onChange={this.handleChange}>
+                <Row className="searchbar">
+                <Col lg="3" md="1">
+                    <Input type="select" onChange={this.handleChangeArea}>
+                      <option value="undefined">Sélectionnez un quartier</option>
                         {areas.map(area => (
                             <option key={area.id} value={area.id}>{area.name}</option>
                         ))}
                     </Input>
-                    <Input type="select">
-                          {Array.from(new Set(restaurants)).map(restaurant => (
-                            <option key={restaurant.id}>{restaurant.primaryCategory}</option>
+                    </Col>
+                    <Col lg="3" md="1">
+                    <Input type="select" onChange={this.handleChangePrimaryCategory}>
+                      <option value="undefined">Sélectionnez une catégorie</option>
+                          {primaryCategory.map(restaurant => (
+                            <option key={restaurant} value={restaurant}>{restaurant}</option>
                           ))}
                     </Input>
-                <Button type="submit">ok</Button>
+                    </Col>
+                    <Col lg="3" md="1">
+                    <Input type="select" onChange={this.handleChangeSecondaryCategory}>
+                      <option value="undefined">Sélectionnez une catégorie</option>
+                          {secondaryCategory.map(restaurant => (
+                            <option key={restaurant} value={restaurant}>{restaurant}</option>
+                          ))}
+                    </Input>
+                    </Col>
+                    <Col lg="3" md="1">
+                    <Input type="select" onChange={this.handleChangeRating}>
+                      <option value="undefined">Sélectionnez une note</option>
+                          {rating.map(restaurant => (
+                            <option key={restaurant} value={restaurant}>{restaurant}</option>
+                          ))}
+                    </Input>
+                    </Col>
+                    </Row>
+                <Button type="submit" className="button">ok</Button>
                 </Form>
-                {filteredRestaurants.length ? (<RestaurantItem filteredRestaurants={filteredRestaurants}/>)
+                
+                {restaurants.length ? (<RestaurantItem filteredRestaurants={restaurants}/>)
                 : (<p>{message}</p>)}
-            </div>
+            </Container>
         )
     }
 }

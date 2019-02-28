@@ -4,7 +4,7 @@ const cors = require('cors');
 
 const restaurants = require('./api/restaurants');
 const areas = require('./api/areas');
-
+const users = require('./api/users')
 
 const app = express();
 
@@ -17,7 +17,8 @@ app.use(
 );
 
 app.use('/api/restaurants', restaurants);
-app.use('/api/areas', areas)
+app.use('/api/areas', areas);
+app.use('/api/users', users);
 
 const port = process.env.PORT || 3001;
 // eslint-disable-next-line no-console

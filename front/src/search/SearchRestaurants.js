@@ -37,6 +37,7 @@ class SearchRestaurants extends Component {
         targetRating: undefined,
         targetPrimaryCategory: undefined,
         targetSecondCategory: undefined,
+        favoritesUser: []
     }
 
     componentDidMount() {
@@ -52,6 +53,54 @@ class SearchRestaurants extends Component {
             rating : findCategory(data.data, "editorialRating")
           })
         })
+        .then(result => { 
+          axios.get('http://localhost:3001/api/users/1')
+          .then(favorites => {
+            this.setState({
+              favoritesUser: favorites.data 
+            })
+          })
+          .then(result => {
+            this.allRestaurantsAndFavorites(this.state.favoritesUser, this.state.restaurants)
+          })
+              // const favoritesUser = favorites.data
+            // let restaurantByUser = []
+            // favoritesUser.map(favorite => {
+            //   restaurantByUser = this.state.restaurants.map(rest => {
+            //     if (rest.id === favorite.restaurant_id) {
+            //       return ({ ...rest, isFavorite: true})
+            //     }
+            //     return rest
+            //   })
+            //     this.setState({
+            //       restaurants: restaurantByUser
+            //     })
+            //     console.log('end',this.state.restaurants)
+            // })
+        })
+    }
+    allRestaurantsAndFavorites = (favorites, restaurantsTab) => {
+      console.log('favorites', favorites)
+      console.log('restaurantsTab', restaurantsTab)
+      let restaurantByUser = []
+      favorites.map(favorite => {
+        restaurantByUser = this.state.restaurants.map(rest => {
+          if (rest.id === favorite.restaurant_id) {
+            return ({ ...rest, isFavorite: true})
+          }
+          return rest
+        })
+        this.setState({
+          restaurants: restaurantByUser
+        })
+      })
+
+    }
+
+    newArrayWithFavorites = (array) => {
+      this.setState({
+        restaurants: array
+      })
     }
 
     onSubmit = (e) => {
@@ -97,11 +146,17 @@ class SearchRestaurants extends Component {
 
         e.preventDefault()
         axios.get(`http://localhost:3001/api/restaurants/?result=all${areaUrl}${firstCategoryUrl}${secondCategoryUrl}${ratingUrl}`)
+        // .then(data => {
+        //     this.setState({ 
+        //         restaurants: data.data,
+        //         message: data.data.message,
+        //     })
+        // })
         .then(data => {
-            this.setState({ 
-                restaurants: data.data,
-                message: data.data.message,
-            })
+          this.allRestaurantsAndFavorites(this.state.favoritesUser, data.data)
+          // this.setState({
+          //   message: data.data.message
+          // })
         })
     }
 
@@ -135,10 +190,6 @@ class SearchRestaurants extends Component {
 
     render() {
         const { areas, restaurants, message, primaryCategory, secondaryCategory, rating } = this.state;
-
-        console.log("rating", rating)
-        console.log("All", restaurants)
-
         return(
             <Container className="SearchRestaurants">
                 <p>Search Bar</p>
@@ -181,7 +232,7 @@ class SearchRestaurants extends Component {
                 <Button type="submit" className="button">ok</Button>
                 </Form>
                 
-                {restaurants.length ? (<RestaurantItem filteredRestaurants={restaurants}/>)
+                {restaurants.length ? (<RestaurantItem filteredRestaurants={restaurants} newArrayParent={this.newArrayWithFavorites}/>)
                 : (<p>{message}</p>)}
             </Container>
         )

@@ -22,12 +22,12 @@ class RestaurantItem extends Component {
     return imgBar
   }
   handleClickFavorite = (id_restaurant, id_user, isFavorite) => {
-    let newArrayChild = []
+    let updatedRestaurants = []
     if (isFavorite) {
       axios.delete(`http://localhost:3001/api/users/favorites/${id_user}/${id_restaurant}`)
       .then(result => {
         console.log(result)
-        newArrayChild = this.props.filteredRestaurants.map(rest => {
+        updatedRestaurants = this.props.filteredRestaurants.map(rest => {
           if (rest.id === id_restaurant) {
             return ({ ...rest, isFavorite: false})
           }
@@ -35,8 +35,8 @@ class RestaurantItem extends Component {
         })
       })
       .then(newArray => {
-        console.log(newArrayChild)
-        this.props.newArrayParent(newArrayChild)
+        console.log(updatedRestaurants)
+        this.props.updateRestaurants(updatedRestaurants)
       })
       .catch(error => {
         console.log(error)
@@ -47,16 +47,13 @@ class RestaurantItem extends Component {
       axios.post('http://localhost:3001/api/users/favorites', data)
         .then(result => {
           console.log(result)
-          newArrayChild = this.props.filteredRestaurants.map(rest => {
+          const updatedRestaurants = this.props.filteredRestaurants.map(rest => {
             if (rest.id === id_restaurant) {
               return ({ ...rest, isFavorite: true})
             }
             return rest
           })
-        })
-        .then(newArray => {
-          console.log(newArrayChild)
-          this.props.newArrayParent(newArrayChild)
+          this.props.updateRestaurants(updatedRestaurants)
         })
         .catch(error => {
           console.log(error)

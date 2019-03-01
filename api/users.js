@@ -44,7 +44,6 @@ router.post('/login', (req, res) => {
 // get user favorites by passing the id user
 router.get('/:id', (req, res) => {
     const { id } = req.params
-    console.log(id)
     connection.query('SELECT * FROM favorites INNER JOIN restaurants ON favorites.restaurant_id = restaurants.id WHERE user_id = ?', id, (err, result) => {
         if (err) {
             res.status(500).json(err);
@@ -58,7 +57,6 @@ router.get('/:id', (req, res) => {
 // post in the favorites table a user restaurant favorites
 router.post('/favorites', (req, res) => {
     const {id_restaurant, id_user} = req.body
-    console.log("post", req.body)
     connection.query('SELECT * FROM favorites WHERE restaurant_id = ? AND user_id = ?', [id_restaurant, id_user], (err, result) => {
         if (err) {
             res.status(500).json(err);
@@ -86,7 +84,6 @@ router.post('/favorites', (req, res) => {
 // delete a favorites
 router.delete('/favorites/:id_user/:id_restaurant', (req, res) => {
     const {id_restaurant, id_user} = req.params
-    console.log("detete", req.params)
     connection.query('DELETE FROM favorites WHERE restaurant_id = ? AND user_id = ?', [id_restaurant, id_user], (err, result) => {
         if(err) {
             res.status(500).json(err);

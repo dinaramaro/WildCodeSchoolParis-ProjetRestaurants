@@ -61,24 +61,13 @@ class SearchRestaurants extends Component {
             })
           })
           .then(result => {
+            if (this.state.restaurants !== 0) {
             this.allRestaurantsAndFavorites(this.state.favoritesUser, this.state.restaurants)
+            }
           })
-              // const favoritesUser = favorites.data
-            // let restaurantByUser = []
-            // favoritesUser.map(favorite => {
-            //   restaurantByUser = this.state.restaurants.map(rest => {
-            //     if (rest.id === favorite.restaurant_id) {
-            //       return ({ ...rest, isFavorite: true})
-            //     }
-            //     return rest
-            //   })
-            //     this.setState({
-            //       restaurants: restaurantByUser
-            //     })
-            //     console.log('end',this.state.restaurants)
-            // })
         })
     }
+    
     allRestaurantsAndFavorites = (favorites, restaurantsTab) => {
       console.log('favorites', favorites)
       console.log('restaurantsTab', restaurantsTab)
@@ -145,19 +134,27 @@ class SearchRestaurants extends Component {
         }
 
         e.preventDefault()
-        axios.get(`http://localhost:3001/api/restaurants/?result=all${areaUrl}${firstCategoryUrl}${secondCategoryUrl}${ratingUrl}`)
-        // .then(data => {
-        //     this.setState({ 
-        //         restaurants: data.data,
-        //         message: data.data.message,
-        //     })
-        // })
-        .then(data => {
-          this.allRestaurantsAndFavorites(this.state.favoritesUser, data.data)
-          // this.setState({
-          //   message: data.data.message
-          // })
+
+        axios.get('http://localhost:3001/api/users/1')
+        .then(favorites => {
+          this.setState({
+            favoritesUser: favorites.data 
+          })
         })
+
+
+        axios.get(`http://localhost:3001/api/restaurants/?result=all${areaUrl}${firstCategoryUrl}${secondCategoryUrl}${ratingUrl}`)
+        .then(data => {
+          this.setState({ 
+              restaurants: data.data,
+              message: data.data.message,
+          })
+        })
+        .then(data => {
+          if(this.state.restaurants !== 0) {
+            this.allRestaurantsAndFavorites(this.state.favoritesUser, this.state.restaurants)
+           }
+        })   
     }
 
     handleChangeArea = (e) => {
@@ -186,6 +183,20 @@ class SearchRestaurants extends Component {
       this.setState({
         targetRating : rating,
       })
+    }
+
+    handleClickAllFavorites = () => {
+      axios.get('http://localhost:3001/api/users/1')
+        .then(favorites => {
+          this.setState({
+            restaurants: favorites.data.map(restaurant => {
+              return ({ ...restaurant, isFavorite: true})
+            })
+          })
+          console.log(favorites.data)
+        })
+        
+
     }
 
     render() {
@@ -231,6 +242,7 @@ class SearchRestaurants extends Component {
                     </Row>
                 <Button type="submit" className="button">ok</Button>
                 </Form>
+                <Button onClick={this.handleClickAllFavorites}>Voir mes favoris</Button>
                 
                 {restaurants.length ? (<RestaurantItem filteredRestaurants={restaurants} newArrayParent={this.newArrayWithFavorites}/>)
                 : (<p>{message}</p>)}
